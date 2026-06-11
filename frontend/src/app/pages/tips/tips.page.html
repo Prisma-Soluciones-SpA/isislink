@@ -30,7 +30,9 @@
   <!-- Modal de tip -->
   <div class="tip-modal-overlay" *ngIf="selectedTip" (click)="closeTip()">
     <div class="tip-modal" (click)="$event.stopPropagation()">
-      <button class="close-modal" (click)="closeTip()">✕</button>
+
+      <button class="close-modal-btn" (click)="closeTip()">✕</button>
+
       <div class="video-container" *ngIf="selectedTip.videoUrl; else soloImagen">
         <video controls autoplay playsinline
           [src]="getSafeVideoUrl(selectedTip)"
@@ -41,8 +43,12 @@
       <ng-template #soloImagen>
         <img *ngIf="getImageUrl(selectedTip)" [src]="getImageUrl(selectedTip)" class="modal-image">
       </ng-template>
-      <h2>{{selectedTip.title}}</h2>
-      <p>{{selectedTip.description}}</p>
+
+      <div class="modal-info">
+        <h2>{{selectedTip.title}}</h2>
+        <p>{{selectedTip.description}}</p>
+      </div>
+
     </div>
   </div>
 </ion-content>
