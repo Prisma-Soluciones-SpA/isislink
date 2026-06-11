@@ -33,6 +33,11 @@
 
       <button class="close-modal-btn" (click)="closeTip()">✕</button>
 
+      <div class="modal-info">
+        <h2>{{selectedTip.title}}</h2>
+        <p>{{selectedTip.description}}</p>
+      </div>
+
       <div class="video-container" *ngIf="selectedTip.videoUrl; else soloImagen">
         <video controls autoplay playsinline
           [src]="getSafeVideoUrl(selectedTip)"
@@ -43,11 +48,6 @@
       <ng-template #soloImagen>
         <img *ngIf="getImageUrl(selectedTip)" [src]="getImageUrl(selectedTip)" class="modal-image">
       </ng-template>
-
-      <div class="modal-info">
-        <h2>{{selectedTip.title}}</h2>
-        <p>{{selectedTip.description}}</p>
-      </div>
 
     </div>
   </div>
