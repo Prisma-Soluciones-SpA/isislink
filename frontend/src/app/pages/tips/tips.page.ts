@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Tip } from '../../services/tip';
 import { environment } from '../../../environments/environment';
 
@@ -14,7 +15,7 @@ export class TipsPage implements OnInit {
   selectedTip: any = null;
   uploadsUrl = environment.uploadsUrl;
 
-  constructor(private tipService: Tip) {}
+  constructor(private tipService: Tip, private sanitizer: DomSanitizer) {}
 
   ngOnInit() { this.loadTips(); }
 
@@ -29,6 +30,10 @@ export class TipsPage implements OnInit {
   getImageUrl(tip: any) {
     if (!tip?.imageUrl) return null;
     return tip.imageUrl.startsWith('http') ? tip.imageUrl : `${this.uploadsUrl}${tip.imageUrl}`;
+  }
+
+  getSafeVideoUrl(tip: any): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(tip.videoUrl);
   }
 
   openTip(tip: any) { this.selectedTip = tip; }
