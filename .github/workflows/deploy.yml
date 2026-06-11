@@ -17,7 +17,4 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            cd /opt/isislink
-            git pull origin main
-            docker compose up -d --build
-            docker image prune -f
+            bash /opt/isislink/deploy.sh
