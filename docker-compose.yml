@@ -26,6 +26,8 @@ services:
       TBK_RETURN_URL: ${TBK_RETURN_URL}
       UPLOAD_DIR: uploads/profiles
       MAX_FILE_SIZE: 5242880
+      SOAP_EMAIL: ${SOAP_EMAIL}
+      SOAP_CLAVE: ${SOAP_CLAVE}
     volumes:
       - uploads:/app/uploads
     depends_on:
