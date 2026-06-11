@@ -1,0 +1,42 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-title>💫 Mis Matches</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="matches-content">
+  <div *ngIf="loading" class="loading-state">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando conexiones...</p>
+  </div>
+
+  <div *ngIf="!loading && matches.length === 0" class="empty-state">
+    <div class="empty-icon">💝</div>
+    <h3>Aún sin matches</h3>
+    <p>Explora perfiles y da like para hacer tu primer match.</p>
+    <ion-button class="mystic-btn" routerLink="/discover">Explorar ahora</ion-button>
+  </div>
+
+  <ion-list *ngIf="!loading && matches.length > 0" class="matches-list">
+    <ion-item *ngFor="let m of matches" [routerLink]="['/chat', m.matchId]" detail="false" class="match-item">
+      <div class="match-avatar" slot="start">
+        <img *ngIf="getPhotoUrl(m.user)" [src]="getPhotoUrl(m.user)" alt="">
+        <div *ngIf="!getPhotoUrl(m.user)" class="avatar-fallback">
+          {{m.user?.firstName?.charAt(0)}}
+        </div>
+        <div class="compat-ring" [style.background]="'conic-gradient(#EC4899 ' + m.compatibilityScore + '%, transparent 0)'"></div>
+      </div>
+      <ion-label>
+        <h2>{{m.user?.firstName}} {{m.user?.lastName}}</h2>
+        <p class="zodiac-sub">{{m.user?.zodiacSign}} · {{getAge(m.user?.birthDate)}} años</p>
+        <p class="city-sub" *ngIf="m.user?.city"><ion-icon name="location-outline"></ion-icon> {{m.user?.city}}</p>
+      </ion-label>
+      <div class="compat-score" slot="end">
+        <span>{{m.compatibilityScore}}%</span>
+        <small>Afinidad</small>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<app-bottom-nav active="matches"></app-bottom-nav>

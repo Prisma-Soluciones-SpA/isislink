@@ -1,0 +1,43 @@
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="stars-bg">
+    <div class="star" *ngFor="let s of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]" [style.left]="(s*4.8)+'%'" [style.top]="(s*3.2+s*s*0.3)%100+'%'" [style.animation-delay]="(s*0.4)+'s'"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="logo-section">
+      <div class="moon-icon">🌙</div>
+      <h1 class="app-title">ISISLINK</h1>
+      <p class="app-subtitle">Conecta con tu alma gemela estelar</p>
+    </div>
+
+    <div class="form-card">
+      <form [formGroup]="form" (ngSubmit)="onLogin()">
+        <div class="input-group">
+          <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+          <ion-input formControlName="email" type="email" placeholder="Correo electrónico" class="mystic-input" autocomplete="email"></ion-input>
+        </div>
+
+        <div class="input-group">
+          <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+          <ion-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" class="mystic-input"></ion-input>
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="eye-icon" (click)="showPassword = !showPassword"></ion-icon>
+        </div>
+
+        <ion-button expand="block" type="submit" class="mystic-btn" [disabled]="form.invalid">
+          <ion-icon name="sparkles-outline" slot="start"></ion-icon>
+          Iniciar Sesión
+        </ion-button>
+      </form>
+
+      <div class="divider"><span>o</span></div>
+
+      <ion-button expand="block" fill="clear" class="register-link" routerLink="/register">
+        ¿No tienes cuenta? <strong>&nbsp;Regístrate</strong>
+      </ion-button>
+    </div>
+
+    <div class="zodiac-strip">
+      <span *ngFor="let sign of ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓']">{{sign}}</span>
+    </div>
+  </div>
+</ion-content>

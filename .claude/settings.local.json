@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"c:/Users/abarr/OneDrive/Escritorio/angular/astralink2/backend/src/config\")",
+      "Bash(mkdir -p \"c:/Users/abarr/OneDrive/Escritorio/angular/astralink2/backend/src/models\")",
+      "Bash(mkdir -p \"c:/Users/abarr/OneDrive/Escritorio/angular/astralink2/backend/src/controllers\")",
+      "Bash(mkdir -p \"c:/Users/abarr/OneDrive/Escritorio/angular/astralink2/backend/src/routes\")",
+      "Bash(mkdir -p \"c:/Users/abarr/OneDrive/Escritorio/angular/astralink2/backend/src/middleware\")",
+      "Bash(ionic start *)",
+      "Bash(npm install *)",
+      "Bash(ionic capacitor *)",
+      "Bash(npx ng *)",
+      "Bash(ionic generate *)",
+      "Bash(node -e ' *)",
+      "Bash(npm view *)",
+      "Bash(node -e \"const tbk = require\\('./node_modules/transbank-sdk'\\); console.log\\(Object.keys\\(tbk\\)\\);\")",
+      "Bash(node -e \"const tbk = require\\('./node_modules/transbank-sdk'\\); console.log\\(JSON.stringify\\(Object.keys\\(tbk\\), null, 2\\)\\);\")",
+      "Bash(node -e \"const {WebpayPlus, Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes} = require\\('transbank-sdk'\\); console.log\\('Transbank OK:', typeof WebpayPlus.Transaction\\);\")"
+    ]
+  }
+}

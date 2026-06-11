@@ -1,0 +1,76 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-title>✨ ISISLINK</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/profile">
+        <ion-icon name="person-circle-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <div class="hero-section">
+    <div class="profile-avatar" (click)="router.navigate(['/profile'])">
+      <img *ngIf="getProfileUrl()" [src]="getProfileUrl()" alt="Perfil" class="avatar-img">
+      <div *ngIf="!getProfileUrl()" class="avatar-placeholder">
+        <ion-icon name="person"></ion-icon>
+      </div>
+      <div class="zodiac-badge">{{zodiacSymbols[user?.zodiacSign || ''] || '✦'}}</div>
+    </div>
+
+    <h2 class="user-name">{{user?.firstName}} {{user?.lastName}}</h2>
+    <p class="zodiac-name">{{user?.zodiacSign}}</p>
+
+    <div class="energy-bar" *ngIf="user?.gender === 'male'">
+      <div *ngIf="subscription" class="sub-badge premium">
+        <ion-icon name="star"></ion-icon> {{subscription.planType | titlecase}}
+      </div>
+      <div *ngIf="!subscription" class="sub-badge free">
+        <ion-icon name="flash"></ion-icon> Freemium
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" routerLink="/matches">
+      <ion-icon name="heart" class="stat-icon match-icon"></ion-icon>
+      <span class="stat-number">{{matchCount}}</span>
+      <span class="stat-label">Matches</span>
+    </div>
+    <div class="stat-card" *ngIf="user?.gender === 'male'">
+      <ion-icon name="flash" class="stat-icon like-icon"></ion-icon>
+      <span class="stat-number">{{likesRemaining !== null ? likesRemaining : '∞'}}</span>
+      <span class="stat-label">Likes restantes</span>
+    </div>
+  </div>
+
+  <div class="action-cards">
+    <div class="action-card discover" routerLink="/discover">
+      <div class="action-glow"></div>
+      <ion-icon name="search" class="action-icon"></ion-icon>
+      <h3>Explorar</h3>
+      <p>Encuentra tu alma gemela astral</p>
+    </div>
+
+    <div class="action-card tips" routerLink="/tips">
+      <div class="action-glow green"></div>
+      <ion-icon name="book" class="action-icon"></ion-icon>
+      <h3>Tips Esotéricos</h3>
+      <p>Consejos de la Maestra</p>
+    </div>
+  </div>
+
+  <div class="upgrade-banner" *ngIf="user?.gender === 'male' && !subscription" routerLink="/plans">
+    <div class="banner-content">
+      <ion-icon name="sparkles"></ion-icon>
+      <div>
+        <h4>¡Desbloquea tu potencial!</h4>
+        <p>Suscríbete y conecta sin límites</p>
+      </div>
+      <ion-icon name="chevron-forward"></ion-icon>
+    </div>
+  </div>
+</ion-content>
+
+<app-bottom-nav active="home"></app-bottom-nav>

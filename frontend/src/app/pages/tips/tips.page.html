@@ -1,0 +1,44 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-title>🔮 Tips Esotéricos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="tips-content">
+  <div class="tips-intro">
+    <p>Sabiduría de la Maestra Estelar</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <div class="tips-grid" *ngIf="!loading">
+    <div class="tip-card" *ngFor="let tip of tips" (click)="openTip(tip)">
+      <div class="tip-image">
+        <img *ngIf="getImageUrl(tip)" [src]="getImageUrl(tip)" [alt]="tip.title">
+        <div *ngIf="!getImageUrl(tip)" class="tip-placeholder">🌙</div>
+      </div>
+      <div class="tip-body">
+        <h3>{{tip.title}}</h3>
+        <p>{{tip.description | slice:0:80}}...</p>
+        <span class="tip-category" *ngIf="tip.category">{{tip.category}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de tip -->
+  <div class="tip-modal-overlay" *ngIf="selectedTip" (click)="closeTip()">
+    <div class="tip-modal" (click)="$event.stopPropagation()">
+      <button class="close-modal" (click)="closeTip()">✕</button>
+      <img *ngIf="getImageUrl(selectedTip)" [src]="getImageUrl(selectedTip)" class="modal-image">
+      <h2>{{selectedTip.title}}</h2>
+      <p>{{selectedTip.description}}</p>
+      <div class="video-container" *ngIf="selectedTip.videoUrl">
+        <iframe [src]="selectedTip.videoUrl" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<app-bottom-nav active="tips"></app-bottom-nav>

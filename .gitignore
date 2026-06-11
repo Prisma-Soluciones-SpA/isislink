@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+
+# Variables de entorno (NUNCA subir)
+backend/.env
+*.env
+
+# Build frontend
+frontend/www/
+frontend/.angular/
+
+# Capacitor
+frontend/android/
+frontend/ios/
+
+# Uploads (archivos subidos por usuarios)
+backend/uploads/profiles/*
+!backend/uploads/profiles/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# TypeScript cache
+*.tsbuildinfo

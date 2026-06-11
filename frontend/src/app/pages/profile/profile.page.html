@@ -1,0 +1,140 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>👤 Mi Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="isEditing = !isEditing">
+        <ion-icon [name]="isEditing ? 'close-outline' : 'create-outline'" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="profile-content">
+
+  <!-- Vista de perfil -->
+  <div *ngIf="!isEditing" class="profile-view">
+    <div class="profile-header">
+      <div class="avatar-container" (click)="isEditing = true">
+        <img *ngIf="getProfileUrl()" [src]="getProfileUrl()" alt="Perfil" class="profile-img">
+        <div *ngIf="!getProfileUrl()" class="avatar-placeholder">
+          <ion-icon name="person"></ion-icon>
+        </div>
+        <div class="zodiac-overlay">{{zodiacSymbols[user?.zodiacSign || ''] || '✦'}}</div>
+      </div>
+      <h2 class="profile-name">{{user?.firstName}} {{user?.lastName}}</h2>
+      <p class="profile-zodiac">{{user?.zodiacSign}}</p>
+      <p class="profile-city" *ngIf="user?.city">
+        <ion-icon name="location-outline"></ion-icon> {{user?.city}}
+      </p>
+      <div class="gender-badge" [class.female]="user?.gender === 'female'">
+        {{user?.gender === 'female' ? '♀ Mujer' : '♂ Hombre'}}
+      </div>
+    </div>
+
+    <div class="profile-section" *ngIf="user?.bio">
+      <h4 class="section-title">Sobre mí</h4>
+      <p class="bio-text">{{user?.bio}}</p>
+    </div>
+
+    <div class="profile-section" *ngIf="user?.esotericPreferences?.length">
+      <h4 class="section-title">🔮 Intereses Esotéricos</h4>
+      <div class="prefs-display">
+        <span class="pref-badge" *ngFor="let p of user?.esotericPreferences">{{p}}</span>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h4 class="section-title">Información</h4>
+      <div class="info-row" *ngIf="user?.email">
+        <ion-icon name="mail-outline"></ion-icon>
+        <span>{{user?.email}}</span>
+      </div>
+      <div class="info-row" *ngIf="user?.phone">
+        <ion-icon name="call-outline"></ion-icon>
+        <span>{{user?.phone}}</span>
+      </div>
+    </div>
+
+    <div class="logout-section">
+      <ion-button expand="block" fill="outline" color="danger" (click)="confirmLogout()" class="logout-btn">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Cerrar Sesión
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Modo edición -->
+  <div *ngIf="isEditing" class="profile-edit">
+    <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event)">
+    <div class="edit-photo-section">
+      <div class="avatar-edit" (click)="changePhoto()">
+        <img *ngIf="profileImagePreview" [src]="profileImagePreview" alt="Nueva foto">
+        <img *ngIf="!profileImagePreview && getProfileUrl()" [src]="getProfileUrl()" alt="Perfil">
+        <div *ngIf="!profileImagePreview && !getProfileUrl()" class="avatar-placeholder">
+          <ion-icon name="person"></ion-icon>
+        </div>
+        <div class="edit-overlay">
+          <ion-icon name="camera"></ion-icon>
+        </div>
+      </div>
+      <p class="change-photo-hint">Toca para cambiar foto</p>
+    </div>
+
+    <form [formGroup]="form" class="edit-form">
+      <div class="input-row">
+        <div class="input-group half">
+          <label>Nombre</label>
+          <ion-input formControlName="firstName" class="mystic-input"></ion-input>
+        </div>
+        <div class="input-group half">
+          <label>Apellido</label>
+          <ion-input formControlName="lastName" class="mystic-input"></ion-input>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Bio</label>
+        <ion-textarea formControlName="bio" rows="3" class="mystic-input" placeholder="Cuéntanos sobre ti..."></ion-textarea>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group half">
+          <label>Ciudad</label>
+          <ion-input formControlName="city" class="mystic-input"></ion-input>
+        </div>
+        <div class="input-group half">
+          <label>Teléfono</label>
+          <ion-input formControlName="phone" type="tel" class="mystic-input"></ion-input>
+        </div>
+      </div>
+    </form>
+
+    <div class="edit-section">
+      <h4 class="section-title">🔮 Intereses Esotéricos</h4>
+      <div class="preferences-grid">
+        <div class="pref-chip"
+             *ngFor="let pref of esotericOptions"
+             [class.selected]="isSelected(pref)"
+             (click)="togglePreference(pref)">
+          {{pref}}
+        </div>
+      </div>
+    </div>
+
+    <div class="edit-actions">
+      <ion-button expand="block" class="mystic-btn" (click)="saveProfile()">
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        Guardar Cambios
+      </ion-button>
+      <ion-button expand="block" fill="clear" (click)="isEditing = false" class="cancel-btn">
+        Cancelar
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>
+
+<app-bottom-nav active="profile"></app-bottom-nav>

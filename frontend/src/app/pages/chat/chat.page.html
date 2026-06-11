@@ -1,0 +1,50 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/matches" text=""></ion-back-button>
+    </ion-buttons>
+    <div class="chat-header-user" *ngIf="otherUser">
+      <div class="chat-avatar-small">
+        <img *ngIf="getPhotoUrl(otherUser)" [src]="getPhotoUrl(otherUser)" alt="">
+        <span *ngIf="!getPhotoUrl(otherUser)">{{otherUser.firstName?.charAt(0)}}</span>
+      </div>
+      <div>
+        <ion-title>{{otherUser?.firstName}}</ion-title>
+        <p class="typing-indicator" *ngIf="isTyping">escribiendo...</p>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="chat-content">
+  <div class="message-list" #messageList>
+    <div *ngFor="let msg of messages"
+         class="message-bubble"
+         [class.mine]="isMine(msg)"
+         [class.theirs]="!isMine(msg)">
+      <div class="bubble-inner">
+        <p>{{msg.content}}</p>
+        <span class="time">{{msg.createdAt | date:'HH:mm'}}</span>
+      </div>
+    </div>
+
+    <div class="typing-bubble" *ngIf="isTyping">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</ion-content>
+
+<div class="chat-input-bar">
+  <ion-textarea
+    [(ngModel)]="newMessage"
+    placeholder="Escribe un mensaje..."
+    rows="1"
+    auto-grow="true"
+    class="message-input"
+    (ionInput)="onTyping()"
+    (keyup.enter)="sendMessage()">
+  </ion-textarea>
+  <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+    <ion-icon name="send"></ion-icon>
+  </button>
+</div>

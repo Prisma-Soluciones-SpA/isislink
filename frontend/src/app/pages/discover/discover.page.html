@@ -1,0 +1,102 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-title>🔍 Explorar</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadSuggestions()">
+        <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="discover-content">
+
+  <div *ngIf="loading" class="loading-state">
+    <div class="cosmic-loader">
+      <div class="orbit"></div>
+      <div class="planet">✨</div>
+    </div>
+    <p>Buscando almas afines...</p>
+  </div>
+
+  <div *ngIf="!loading && suggestions.length === 0" class="empty-state">
+    <div class="empty-icon">🌌</div>
+    <h3>El universo está en silencio</h3>
+    <p>No hay más perfiles por ahora. Vuelve más tarde.</p>
+    <ion-button class="mystic-btn" (click)="loadSuggestions()">Buscar de nuevo</ion-button>
+  </div>
+
+  <div *ngIf="!loading && currentProfile" class="swipe-container">
+    <div class="card-stack">
+      <!-- Next card (preview) -->
+      <div class="profile-card next-card" *ngIf="suggestions[currentIndex + 1]">
+        <div class="card-photo">
+          <img *ngIf="getPhotoUrl(suggestions[currentIndex + 1])" [src]="getPhotoUrl(suggestions[currentIndex + 1])" alt="">
+          <div *ngIf="!getPhotoUrl(suggestions[currentIndex + 1])" class="no-photo-bg">
+            <span>{{zodiacSymbols[suggestions[currentIndex + 1]?.zodiacSign] || '✦'}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current card -->
+      <div class="profile-card current-card"
+           [style.transform]="'translateX(' + cardTranslateX + 'px) rotate(' + cardRotation + 'deg)'"
+           [class.like-glow]="cardTranslateX > 50"
+           [class.pass-glow]="cardTranslateX < -50"
+           (touchstart)="onTouchStart($event)"
+           (touchmove)="onTouchMove($event)"
+           (touchend)="onTouchEnd()">
+
+        <div class="swipe-hint like" [style.opacity]="cardTranslateX > 30 ? (cardTranslateX - 30) / 80 : 0">
+          <ion-icon name="heart"></ion-icon> LIKE
+        </div>
+        <div class="swipe-hint pass" [style.opacity]="cardTranslateX < -30 ? (-cardTranslateX - 30) / 80 : 0">
+          PASS <ion-icon name="close"></ion-icon>
+        </div>
+
+        <div class="card-photo">
+          <img *ngIf="getPhotoUrl(currentProfile)" [src]="getPhotoUrl(currentProfile)" alt="Perfil">
+          <div *ngIf="!getPhotoUrl(currentProfile)" class="no-photo-bg">
+            <span class="zodiac-large">{{zodiacSymbols[currentProfile.zodiacSign] || '✦'}}</span>
+          </div>
+        </div>
+
+        <div class="card-info">
+          <div class="card-header-info">
+            <div>
+              <h2>{{currentProfile.firstName}}, {{getAge(currentProfile.age || currentProfile.birthDate)}}</h2>
+              <p class="city"><ion-icon name="location-outline"></ion-icon> {{currentProfile.city}}</p>
+            </div>
+            <div class="compat-badge" [class.high]="currentProfile.compatibilityScore >= 70">
+              {{currentProfile.compatibilityScore}}%
+            </div>
+          </div>
+
+          <div class="zodiac-row">
+            <span class="zodiac-chip">{{zodiacSymbols[currentProfile.zodiacSign]}} {{currentProfile.zodiacSign}}</span>
+          </div>
+
+          <div class="pref-tags" *ngIf="currentProfile.esotericPreferences?.length">
+            <span class="pref-tag" *ngFor="let p of currentProfile.esotericPreferences.slice(0,3)">{{p}}</span>
+          </div>
+
+          <p class="bio-text" *ngIf="currentProfile.bio">{{currentProfile.bio}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="action-btn pass-btn" (click)="pass()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+      <button class="action-btn like-btn" (click)="like()">
+        <ion-icon name="heart"></ion-icon>
+      </button>
+    </div>
+
+    <p class="swipe-hint-text">Desliza ← para pasar · → para dar like</p>
+  </div>
+
+</ion-content>
+
+<app-bottom-nav active="discover"></app-bottom-nav>

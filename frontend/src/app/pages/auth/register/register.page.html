@@ -1,0 +1,151 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Cuenta</ion-title>
+    <ion-note slot="end" class="step-indicator">{{step}}/3</ion-note>
+  </ion-toolbar>
+  <ion-progress-bar [value]="step/3" color="secondary"></ion-progress-bar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="register-content">
+  <form [formGroup]="form">
+
+    <!-- PASO 1: Datos personales -->
+    <div *ngIf="step === 1" class="step-container">
+      <div class="step-header">
+        <div class="step-icon">✨</div>
+        <h2>Información Personal</h2>
+        <p>Cuéntanos sobre ti</p>
+      </div>
+
+      <div class="form-section">
+        <div class="input-row">
+          <div class="input-group half">
+            <label>Nombre</label>
+            <ion-input formControlName="firstName" placeholder="Tu nombre" class="mystic-input"></ion-input>
+          </div>
+          <div class="input-group half">
+            <label>Apellido</label>
+            <ion-input formControlName="lastName" placeholder="Tu apellido" class="mystic-input"></ion-input>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Correo Electrónico</label>
+          <ion-input formControlName="email" type="email" placeholder="tu@email.com" class="mystic-input"></ion-input>
+        </div>
+
+        <div class="input-group">
+          <label>Contraseña</label>
+          <ion-input formControlName="password" type="password" placeholder="Mínimo 6 caracteres" class="mystic-input"></ion-input>
+        </div>
+
+        <div class="input-group">
+          <label>Género</label>
+          <div class="gender-selector">
+            <div class="gender-option" [class.selected]="form.get('gender')?.value === 'female'" (click)="form.get('gender')?.setValue('female')">
+              <span class="gender-icon">♀</span>
+              <span>Mujer</span>
+              <small>Gratis</small>
+            </div>
+            <div class="gender-option male" [class.selected]="form.get('gender')?.value === 'male'" (click)="form.get('gender')?.setValue('male')">
+              <span class="gender-icon">♂</span>
+              <span>Hombre</span>
+              <small>Suscripción</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Fecha de Nacimiento</label>
+          <ion-input formControlName="birthDate" type="date" class="mystic-input"></ion-input>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group half">
+            <label>Ciudad</label>
+            <ion-input formControlName="city" placeholder="Tu ciudad" class="mystic-input"></ion-input>
+          </div>
+          <div class="input-group half">
+            <label>Teléfono</label>
+            <ion-input formControlName="phone" type="tel" placeholder="+56 9..." class="mystic-input"></ion-input>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Bio</label>
+          <ion-textarea formControlName="bio" placeholder="Cuéntanos algo de ti..." rows="3" class="mystic-input"></ion-textarea>
+        </div>
+      </div>
+
+      <ion-button expand="block" class="mystic-btn" (click)="nextStep()" [disabled]="form.get('firstName')?.invalid || form.get('email')?.invalid || form.get('gender')?.invalid">
+        Continuar <ion-icon name="arrow-forward" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- PASO 2: Preferencias esotéricas -->
+    <div *ngIf="step === 2" class="step-container">
+      <div class="step-header">
+        <div class="step-icon">🔮</div>
+        <h2>Tu Mundo Esotérico</h2>
+        <p>Selecciona tus intereses (puedes elegir varios)</p>
+      </div>
+
+      <div class="preferences-grid">
+        <div class="pref-chip"
+             *ngFor="let pref of esotericOptions"
+             [class.selected]="isSelected(pref)"
+             (click)="togglePreference(pref)">
+          {{pref}}
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <ion-button fill="outline" class="back-btn" (click)="prevStep()">
+          <ion-icon name="arrow-back" slot="start"></ion-icon> Atrás
+        </ion-button>
+        <ion-button class="mystic-btn" (click)="nextStep()">
+          Continuar <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- PASO 3: Foto de perfil -->
+    <div *ngIf="step === 3" class="step-container">
+      <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event)">
+
+      <div class="step-header">
+        <div class="step-icon">📸</div>
+        <h2>Tu Foto de Perfil</h2>
+        <p>Muestra tu energía al mundo</p>
+      </div>
+
+      <div class="photo-section">
+        <div class="photo-preview" (click)="selectPhoto()">
+          <img *ngIf="profileImagePreview" [src]="profileImagePreview" alt="Foto de perfil">
+          <div *ngIf="!profileImagePreview" class="photo-placeholder">
+            <ion-icon name="camera-outline"></ion-icon>
+            <p>Toca para seleccionar foto</p>
+          </div>
+        </div>
+        <ion-button fill="clear" class="change-photo-btn" (click)="selectPhoto()">
+          <ion-icon name="camera" slot="start"></ion-icon>
+          {{profileImagePreview ? 'Cambiar foto' : 'Seleccionar foto'}}
+        </ion-button>
+      </div>
+
+      <div class="nav-buttons">
+        <ion-button fill="outline" class="back-btn" (click)="prevStep()">
+          <ion-icon name="arrow-back" slot="start"></ion-icon> Atrás
+        </ion-button>
+        <ion-button class="mystic-btn" (click)="onRegister()" [disabled]="form.invalid">
+          <ion-icon name="sparkles-outline" slot="start"></ion-icon>
+          Crear Cuenta
+        </ion-button>
+      </div>
+    </div>
+
+  </form>
+</ion-content>

@@ -1,0 +1,67 @@
+<ion-header class="mystic-header">
+  <ion-toolbar>
+    <ion-title>⭐ Planes de Suscripción</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="plans-content">
+  <div class="plans-hero">
+    <div class="hero-icon">🌟</div>
+    <h1>Conecta con el Cosmos</h1>
+    <p *ngIf="isNewUser">Para comenzar, elige tu plan de suscripción</p>
+    <p *ngIf="!isNewUser && !currentSubscription">Activa tu suscripción y conecta sin límites</p>
+
+    <div class="freemium-status" *ngIf="!currentSubscription">
+      <ion-icon name="flash"></ion-icon>
+      <span>Likes gratuitos restantes: <strong>{{likesRemaining}}</strong></span>
+    </div>
+  </div>
+
+  <div class="active-plan" *ngIf="currentSubscription">
+    <div class="active-badge">✅ Plan Activo</div>
+    <h3>{{currentSubscription.planType | titlecase}}</h3>
+    <p>Vence: {{currentSubscription.endDate | date:'dd/MM/yyyy'}}</p>
+    <p *ngIf="currentSubscription.likesLimit !== null">
+      Likes: {{currentSubscription.likesUsed}} / {{currentSubscription.likesLimit}}
+    </p>
+    <p *ngIf="currentSubscription.likesLimit === null">Likes: ∞ Ilimitados</p>
+  </div>
+
+  <div class="plans-grid">
+    <div class="plan-card"
+         *ngFor="let plan of planDetails"
+         [class.popular]="plan.popular"
+         [class.active]="currentSubscription?.planType === plan.key">
+
+      <div class="popular-badge" *ngIf="plan.popular">⭐ Más Popular</div>
+
+      <div class="plan-icon" [style.background]="plan.color + '20'">{{plan.icon}}</div>
+      <h3 class="plan-name">{{plan.name}}</h3>
+      <div class="plan-price">{{plan.price}}<span>/mes</span></div>
+      <p class="plan-likes">{{plan.likes}}</p>
+
+      <ul class="plan-features">
+        <li *ngFor="let f of plan.features">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon> {{f}}
+        </li>
+      </ul>
+
+      <ion-button
+        expand="block"
+        class="plan-btn"
+        [style.--background]="plan.color"
+        [disabled]="currentSubscription?.planType === plan.key"
+        (click)="subscribe(plan.key)">
+        {{currentSubscription?.planType === plan.key ? 'Plan Actual' : 'Suscribirse'}}
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="transbank-info">
+    <img src="assets/transbank.png" alt="Transbank" onerror="this.style.display='none'">
+    <p>Pago seguro con <strong>Transbank WebPay</strong></p>
+    <p>Acepta todas las tarjetas de crédito y débito</p>
+  </div>
+</ion-content>
+
+<app-bottom-nav active="plans"></app-bottom-nav>

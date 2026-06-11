@@ -1,0 +1,7 @@
+<div class="bottom-nav">
+  <a *ngFor="let tab of tabs" [routerLink]="tab.route" class="nav-item" [class.active]="active === tab.id">
+    <ion-icon [name]="active === tab.id ? tab.icon : tab.icon + '-outline'"></ion-icon>
+    <span>{{tab.label}}</span>
+    <div class="active-dot" *ngIf="active === tab.id"></div>
+  </a>
+</div>
